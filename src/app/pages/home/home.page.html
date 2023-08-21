@@ -1,0 +1,28 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div>
+    <swiper-container [autoplay]="{delay:5000}" loop="true" space-between="20">
+      <swiper-slide *ngFor="let menu of menus">
+        <ion-card (click)="goTo(menu.url)">
+          <div class="bg-img" [ngStyle]= "{'background-image': menu.background?'url('+ menu.background +')':'none'}"></div>
+          <div class="card-overlay"></div>
+          <ion-card-header>
+            <ion-card-title>{{menu.title}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label class="subtitle">{{menu.summary}}</ion-label>
+            <ion-label class="description">{{menu.description}}</ion-label>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+</ion-content>

@@ -1,0 +1,79 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Damage Calculator</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Calculate Damage</ion-card-title>
+          <ion-button color="warning" class="btn calc-btn" fill="outline" size="small" (click)="calculate()"><ion-icon name="color-wand-outline"></ion-icon>Calculate</ion-button>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label class="subtitle">Input your stat below</ion-label>
+          <ion-list>
+            <ion-item lines="none" class="ion-text-wrap">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-input type="number" label="Attack" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.attack"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Skill Multiplier" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.skillMultiplier"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Element Damage" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.elementDmg"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Damage Boost" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.dmgBoost"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Char Level" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.charLvl"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Enemy's Level" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.enemiesLvl"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Def Reduce" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.defReduc"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Def Ignore" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.defIgnore"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-checkbox justify="space-between" [(ngModel)]="myStats.isEnemiesWeak">Enemy is Weak</ion-checkbox>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Damage Taken Debuff" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.dmgTakenDebuff"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-checkbox justify="space-between" [(ngModel)]="myStats.isEnemiesBreakState">Enemy's Break State</ion-checkbox>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Crit Damage" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.critDmg"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Res Pen" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.resPen"></ion-input>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-input readonly class="result" type="number" label="Damage Dealt (Calculated)" labelPlacement="stacked" [(ngModel)]="dmgResult.estdDmgOutput"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input readonly class="result" type="number" label="Damage Dealt on Crit (Calculated)" labelPlacement="stacked" [(ngModel)]="dmgResult.estdCritDmgOutput"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </ion-grid>
+</ion-content>

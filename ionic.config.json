@@ -1,0 +1,7 @@
+{
+  "name": "Helper Star Rail",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
