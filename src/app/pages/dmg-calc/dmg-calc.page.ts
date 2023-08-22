@@ -79,16 +79,28 @@ export class DmgCalcPage implements OnInit {
           this.trf.remove(DATA_KEY);
         } else {
           console.log('Get Data from API...');
-          const calculated = this.calculate();
-          console.log(calculated);
-          if (isPlatformServer(this.platformId)) {
-            console.log("Is Server");
-            this.setTag();
-            this.trf.set<any>(DATA_KEY, calculated);
-          } else {
-            console.log("Is Client");
-            /* this.dmgResult = calculated; */
-          }
+          const data = JSON.stringify(this.myStats);
+          this.http.post<result>(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(calculated=>{
+            if(calculated){
+              if(isPlatformServer(this.platformId)){
+                console.log("Is Server");
+                this.setTag();
+                this.trf.set<any>(DATA_KEY, calculated);
+              } else {
+                console.log("Is Client");
+                this.dmgResult = calculated;
+              }
+            } else {
+              if(isPlatformServer(this.platformId)){
+                console.log("Is Server");
+                this.setTag();
+                this.trf.set<any>(DATA_KEY, {estdDmgOutput:0, estdCritDmgOutput:0});
+              } else {
+                console.log("Is Client");
+                this.dmgResult = calculated;
+              }
+            }
+          });
         }
       }
     }
@@ -107,18 +119,6 @@ export class DmgCalcPage implements OnInit {
   async navCalc():Promise<void> {
     const url = `/dmg-calc/${this.myStats.attack?this.myStats.attack:0}_${this.myStats.skillMultiplier?this.myStats.skillMultiplier:0}_${this.myStats.elementDmg?this.myStats.elementDmg:0}_${this.myStats.dmgBoost?this.myStats.dmgBoost:0}_${this.myStats.charLvl?this.myStats.charLvl:0}_${this.myStats.enemiesLvl?this.myStats.enemiesLvl:0}_${this.myStats.defReduc?this.myStats.defReduc:0}_${this.myStats.defIgnore?this.myStats.defIgnore:0}_${this.myStats.isEnemiesWeak?1:0}_${this.myStats.dmgTakenDebuff?this.myStats.dmgTakenDebuff:0}_${this.myStats.isEnemiesBreakState?1:0}_${this.myStats.critDmg?this.myStats.critDmg:0}_${this.myStats.resPen?this.myStats.resPen:0}`;
     await this.nav.navigateRoot(url);
-  }
-
-  calculate() {
-    const data = JSON.stringify(this.myStats);
-    this.http.post(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(res=>{
-      console.log(res);
-      if(res){
-        return {estdDmgOutput:0, estdCritDmgOutput:0};
-        /* return {estdDmgOutput:res.data.estdDmgOutput?response.data.estdDmgOutput:0, estdCritDmgOutput:response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0}; */
-      }
-      return {estdDmgOutput:0, estdCritDmgOutput:0};
-    });
   }
 }
 
