@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CapacitorHttp, HttpResponse, HttpOptions } from '@capacitor/core';
+import { Title, Meta } from '@angular/platform-browser';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-dmg-calc',
@@ -8,7 +10,8 @@ import { CapacitorHttp, HttpResponse, HttpOptions } from '@capacitor/core';
   styleUrls: ['./dmg-calc.page.scss'],
 })
 export class DmgCalcPage implements OnInit {
-  apiUrl: string = `http://localhost:8080/hsr/dmg`;
+  apiUrl: string = `http://localhost:8008/hsr/dmg`;
+  url: string|null = '';
   myStats: stats = {
     attack: 0,
     skillMultiplier: 0,
@@ -29,13 +32,16 @@ export class DmgCalcPage implements OnInit {
     estdCritDmgOutput: 0
   };
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private nav: NavController,
+    private title: Title,
+    private meta: Meta
   ) { }
   
   ngOnInit() {
-    const param = this.route.snapshot.paramMap.get('attr');
-    if(param){
-      const attr = param.split("_");
+    this.url = this.route.snapshot.paramMap.get('attr');
+    if(this.url){
+      const attr = this.url.split("_");
       if(attr.length==13){
         this.myStats = {
           attack: parseFloat(attr[0]),
@@ -52,8 +58,24 @@ export class DmgCalcPage implements OnInit {
           critDmg: parseFloat(attr[11]),
           resPen: parseFloat(attr[12])
         }
+        this.calculate();
       }
     }
+  }
+
+  setTag(){
+    this.title.setTitle('Helper Star Rail - Damage Calculator');
+    this.meta.updateTag({ name: 'description', content: 'Honkai Star Rail Damage Calculator' });
+    this.meta.updateTag({ property: 'og:url', content: `/dmg-calc${this.url?'/'+this.url:''}` });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:description', content: `Honkai Star Rail Damage Calculator${this.url?'\nYour damage is: '+this.dmgResult.estdDmgOutput:''}` });
+    this.meta.updateTag({ property: 'og:title', content: 'Helper Star Rail - Damage Calculator' });
+    this.meta.updateTag({ property: 'og:image', content: 'https://hsr.nandakho.my.id/assets/icon/icon.png' });
+  }
+
+  async navCalc():Promise<void> {
+    const url = `/dmg-calc/${this.myStats.attack?this.myStats.attack:0}_${this.myStats.skillMultiplier?this.myStats.skillMultiplier:0}_${this.myStats.elementDmg?this.myStats.elementDmg:0}_${this.myStats.dmgBoost?this.myStats.dmgBoost:0}_${this.myStats.charLvl?this.myStats.charLvl:0}_${this.myStats.enemiesLvl?this.myStats.enemiesLvl:0}_${this.myStats.defReduc?this.myStats.defReduc:0}_${this.myStats.defIgnore?this.myStats.defIgnore:0}_${this.myStats.isEnemiesWeak?1:0}_${this.myStats.dmgTakenDebuff?this.myStats.dmgTakenDebuff:0}_${this.myStats.isEnemiesBreakState?1:0}_${this.myStats.critDmg?this.myStats.critDmg:0}_${this.myStats.resPen?this.myStats.resPen:0}`;
+    await this.nav.navigateRoot(url);
   }
 
   async calculate(): Promise<void>{
@@ -69,6 +91,7 @@ export class DmgCalcPage implements OnInit {
     if(response.data){
       this.dmgResult.estdDmgOutput = response.data.estdDmgOutput?response.data.estdDmgOutput:0;
       this.dmgResult.estdCritDmgOutput = response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0;
+      this.setTag();
     }
   }
 }

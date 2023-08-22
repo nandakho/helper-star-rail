@@ -13,7 +13,6 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>Calculate Damage</ion-card-title>
-          <ion-button color="warning" class="btn calc-btn" fill="outline" size="small" (click)="calculate()"><ion-icon name="color-wand-outline"></ion-icon>Calculate</ion-button>
         </ion-card-header>
         <ion-card-content>
           <ion-label class="subtitle">Input your stat below</ion-label>
@@ -59,6 +58,11 @@
                   </ion-col>
                   <ion-col>
                     <ion-input type="number" label="Res Pen" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.resPen"></ion-input>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-button color="warning" class="btn" fill="outline" (click)="navCalc()"><ion-icon name="color-wand-outline"></ion-icon>Calculate</ion-button>
                   </ion-col>
                 </ion-row>
                 <ion-row>

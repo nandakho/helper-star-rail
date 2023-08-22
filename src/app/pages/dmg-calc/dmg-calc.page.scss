@@ -24,18 +24,6 @@ ion-card {
         padding-bottom: 0px;
         display: flex;
         justify-content: center;
-        ion-button.btn {
-            position: absolute;
-            font-size: x-small;
-            right: 22px;
-            margin: 0px;
-            ion-icon {
-                padding-right: 2px;
-            }
-        }
-        ion-button.add-btn {
-            right: 2px;
-        }
         ion-card-title {
             display: flex;
             justify-content: flex-start;
@@ -76,6 +64,12 @@ ion-card {
                             align-items: center;
                             justify-content: center;
                             color: var(--ion-color-primary-contrast);
+                            ion-button.btn {
+                                text-transform: none;
+                                ion-icon {
+                                    padding-right: 2px;
+                                }
+                            }
                             ion-input {
                                 text-align: center;
                                 border: 1px solid var(--ion-color-medium);
