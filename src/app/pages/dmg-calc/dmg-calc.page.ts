@@ -78,6 +78,7 @@ export class DmgCalcPage implements OnInit {
             this.http.post<result>(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(calculated=>{
               this.dmgResult = calculated?calculated:{estdDmgOutput:0, estdCritDmgOutput:0};
               this.setTag();
+              this.trf.set<any>(DATA_KEY, calculated);
             });
           } else {
             this.dmgResult = {
