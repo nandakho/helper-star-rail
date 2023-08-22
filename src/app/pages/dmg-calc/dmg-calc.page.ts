@@ -1,4 +1,4 @@
-import { Component, OnInit, TransferState, makeStateKey, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, TransferState, makeStateKey, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
@@ -10,7 +10,7 @@ import { isPlatformServer } from '@angular/common';
   templateUrl: './dmg-calc.page.html',
   styleUrls: ['./dmg-calc.page.scss'],
 })
-export class DmgCalcPage implements OnInit {
+export class DmgCalcPage {
   apiUrl: string = `http://localhost:8008/hsr/dmg`;
   url: string|null = '';
   myStats: stats = {
@@ -43,7 +43,7 @@ export class DmgCalcPage implements OnInit {
   ) {
   }
   
-  ngOnInit() {
+  ionViewWillEnter() {
     this.serverSide();
   }
 
@@ -69,34 +69,29 @@ export class DmgCalcPage implements OnInit {
         }
         const DATA_KEY = makeStateKey(this.url);
         if (this.trf.hasKey(DATA_KEY)) {
-          console.log('Fetch from State!');
           const saved = this.trf.get(DATA_KEY, null);
-          console.log(saved);
           this.dmgResult = {
             estdDmgOutput: saved?saved['estdDmgOutput']:0,
             estdCritDmgOutput: saved?saved['estdCritDmgOutput']:0
           }
           this.trf.remove(DATA_KEY);
         } else {
-          console.log('Get Data from API...');
           const data = JSON.stringify(this.myStats);
           this.http.post<result>(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(calculated=>{
             if(calculated){
               if(isPlatformServer(this.platformId)){
-                console.log("Is Server");
+                this.dmgResult = calculated;
                 this.setTag();
                 this.trf.set<any>(DATA_KEY, calculated);
               } else {
-                console.log("Is Client");
                 this.dmgResult = calculated;
               }
             } else {
               if(isPlatformServer(this.platformId)){
-                console.log("Is Server");
+                this.dmgResult = calculated;
                 this.setTag();
                 this.trf.set<any>(DATA_KEY, {estdDmgOutput:0, estdCritDmgOutput:0});
               } else {
-                console.log("Is Client");
                 this.dmgResult = calculated;
               }
             }
