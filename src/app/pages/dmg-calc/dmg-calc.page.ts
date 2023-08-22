@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TransferState, makeStateKey, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CapacitorHttp, HttpResponse, HttpOptions } from '@capacitor/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { NavController } from '@ionic/angular';
+import { isPlatformServer } from '@angular/common';
 
 @Component({
   selector: 'app-dmg-calc',
@@ -35,10 +36,16 @@ export class DmgCalcPage implements OnInit {
     private route: ActivatedRoute,
     private nav: NavController,
     private title: Title,
-    private meta: Meta
-  ) { }
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId:any,
+    private trf: TransferState
+  ) {
+    this.serverSide();
+  }
   
-  ngOnInit() {
+  ngOnInit() { }
+
+  async serverSide(){
     this.url = this.route.snapshot.paramMap.get('attr');
     if(this.url){
       const attr = this.url.split("_");
@@ -58,7 +65,28 @@ export class DmgCalcPage implements OnInit {
           critDmg: parseFloat(attr[11]),
           resPen: parseFloat(attr[12])
         }
-        this.calculate();
+        const DATA_KEY = makeStateKey(this.url);
+        if (this.trf.hasKey(DATA_KEY)) {
+          console.log('Fetch from State!');
+          const saved = this.trf.get(DATA_KEY, null);
+          console.log(saved);
+          this.dmgResult = {
+            estdDmgOutput: saved?saved['estdDmgOutput']:0,
+            estdCritDmgOutput: saved?saved['estdCritDmgOutput']:0
+          }
+          this.trf.remove(DATA_KEY);
+        } else {
+          console.log('Get Data from API...');
+          const calculated = await this.calculate();
+          console.log(calculated);
+          if (isPlatformServer(this.platformId)) {
+            console.log("Is Server");
+            this.trf.set<any>(DATA_KEY, calculated);
+          } else {
+            console.log("Is Client");
+            this.dmgResult = calculated;
+          }
+        }
       }
     }
   }
@@ -78,7 +106,7 @@ export class DmgCalcPage implements OnInit {
     await this.nav.navigateRoot(url);
   }
 
-  async calculate(): Promise<void>{
+  async calculate(): Promise<result>{
     const data = JSON.stringify(this.myStats);
     const options:HttpOptions = {
       method: "POST",
@@ -89,10 +117,10 @@ export class DmgCalcPage implements OnInit {
     const response: HttpResponse = await CapacitorHttp.request(options);
     console.log(response);
     if(response.data){
-      this.dmgResult.estdDmgOutput = response.data.estdDmgOutput?response.data.estdDmgOutput:0;
-      this.dmgResult.estdCritDmgOutput = response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0;
       this.setTag();
+      return Promise.resolve({estdDmgOutput:response.data.estdDmgOutput?response.data.estdDmgOutput:0, estdCritDmgOutput:response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0})
     }
+    return Promise.resolve({estdDmgOutput:0, estdCritDmgOutput:0});
   }
 }
 
