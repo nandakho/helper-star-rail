@@ -81,6 +81,7 @@ export class DmgCalcPage implements OnInit {
           console.log(calculated);
           if (isPlatformServer(this.platformId)) {
             console.log("Is Server");
+            this.setTag();
             this.trf.set<any>(DATA_KEY, calculated);
           } else {
             console.log("Is Client");
@@ -117,7 +118,6 @@ export class DmgCalcPage implements OnInit {
     const response: HttpResponse = await CapacitorHttp.request(options);
     console.log(response);
     if(response.data){
-      this.setTag();
       return Promise.resolve({estdDmgOutput:response.data.estdDmgOutput?response.data.estdDmgOutput:0, estdCritDmgOutput:response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0})
     }
     return Promise.resolve({estdDmgOutput:0, estdCritDmgOutput:0});
