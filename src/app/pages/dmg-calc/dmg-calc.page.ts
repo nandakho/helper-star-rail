@@ -2,7 +2,6 @@ import { Component, OnInit, TransferState, makeStateKey, Inject, PLATFORM_ID } f
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
-import { NavController } from '@ionic/angular';
 import { isPlatformServer } from '@angular/common';
 
 @Component({
@@ -34,7 +33,6 @@ export class DmgCalcPage implements OnInit {
   };
   constructor(
     private route: ActivatedRoute,
-    private nav: NavController,
     private http: HttpClient,
     private title: Title,
     private meta: Meta,
@@ -76,25 +74,17 @@ export class DmgCalcPage implements OnInit {
           this.trf.remove(DATA_KEY);
         } else {
           const data = JSON.stringify(this.myStats);
-          this.http.post<result>(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(calculated=>{
-            if(calculated){
-              if(isPlatformServer(this.platformId)){
-                this.dmgResult = calculated;
-                this.setTag();
-                this.trf.set<any>(DATA_KEY, calculated);
-              } else {
-                this.dmgResult = calculated;
-              }
-            } else {
-              if(isPlatformServer(this.platformId)){
-                this.dmgResult = calculated;
-                this.setTag();
-                this.trf.set<any>(DATA_KEY, {estdDmgOutput:0, estdCritDmgOutput:0});
-              } else {
-                this.dmgResult = calculated;
-              }
+          if(isPlatformServer(this.platformId)){
+            this.http.post<result>(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(calculated=>{
+              this.dmgResult = calculated?calculated:{estdDmgOutput:0, estdCritDmgOutput:0};
+              this.setTag();
+            });
+          } else {
+            this.dmgResult = {
+              estdDmgOutput: 0,
+              estdCritDmgOutput: 0
             }
-          });
+          }
         }
       }
     }
@@ -110,9 +100,9 @@ export class DmgCalcPage implements OnInit {
     this.meta.updateTag({ property: 'og:image', content: 'https://hsr.nandakho.my.id/assets/icon/icon.png' });
   }
 
-  async navCalc():Promise<void> {
+  navCalc():void {
     const url = `/dmg-calc/${this.myStats.attack?this.myStats.attack:0}_${this.myStats.skillMultiplier?this.myStats.skillMultiplier:0}_${this.myStats.elementDmg?this.myStats.elementDmg:0}_${this.myStats.dmgBoost?this.myStats.dmgBoost:0}_${this.myStats.charLvl?this.myStats.charLvl:0}_${this.myStats.enemiesLvl?this.myStats.enemiesLvl:0}_${this.myStats.defReduc?this.myStats.defReduc:0}_${this.myStats.defIgnore?this.myStats.defIgnore:0}_${this.myStats.isEnemiesWeak?1:0}_${this.myStats.dmgTakenDebuff?this.myStats.dmgTakenDebuff:0}_${this.myStats.isEnemiesBreakState?1:0}_${this.myStats.critDmg?this.myStats.critDmg:0}_${this.myStats.resPen?this.myStats.resPen:0}`;
-    await this.nav.navigateRoot(url);
+    location.replace(url);
   }
 }
 
