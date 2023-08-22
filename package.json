@@ -40,7 +40,6 @@
     "rxjs": "~7.8.0",
     "swiper": "^10.0.4",
     "tslib": "^2.3.0",
-    "url": "^0.11.1",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {

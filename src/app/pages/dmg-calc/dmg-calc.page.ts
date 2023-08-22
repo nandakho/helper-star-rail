@@ -1,6 +1,6 @@
 import { Component, OnInit, TransferState, makeStateKey, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CapacitorHttp, HttpResponse, HttpOptions } from '@capacitor/core';
+import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
 import { NavController } from '@ionic/angular';
 import { isPlatformServer } from '@angular/common';
@@ -35,15 +35,17 @@ export class DmgCalcPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private nav: NavController,
+    private http: HttpClient,
     private title: Title,
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId:any,
     private trf: TransferState
   ) {
-    this.serverSide();
   }
   
-  ngOnInit() { }
+  ngOnInit() {
+    this.serverSide();
+  }
 
   async serverSide(){
     this.url = this.route.snapshot.paramMap.get('attr');
@@ -77,7 +79,7 @@ export class DmgCalcPage implements OnInit {
           this.trf.remove(DATA_KEY);
         } else {
           console.log('Get Data from API...');
-          const calculated = await this.calculate();
+          const calculated = this.calculate();
           console.log(calculated);
           if (isPlatformServer(this.platformId)) {
             console.log("Is Server");
@@ -85,7 +87,7 @@ export class DmgCalcPage implements OnInit {
             this.trf.set<any>(DATA_KEY, calculated);
           } else {
             console.log("Is Client");
-            this.dmgResult = calculated;
+            /* this.dmgResult = calculated; */
           }
         }
       }
@@ -107,20 +109,16 @@ export class DmgCalcPage implements OnInit {
     await this.nav.navigateRoot(url);
   }
 
-  async calculate(): Promise<result>{
+  calculate() {
     const data = JSON.stringify(this.myStats);
-    const options:HttpOptions = {
-      method: "POST",
-      url: this.apiUrl,
-      headers: { "Content-Type": "application/json" },
-      data: data
-    };
-    const response: HttpResponse = await CapacitorHttp.request(options);
-    console.log(response);
-    if(response.data){
-      return Promise.resolve({estdDmgOutput:response.data.estdDmgOutput?response.data.estdDmgOutput:0, estdCritDmgOutput:response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0})
-    }
-    return Promise.resolve({estdDmgOutput:0, estdCritDmgOutput:0});
+    this.http.post(this.apiUrl,data,{headers:{ "Content-Type": "application/json" }}).subscribe(res=>{
+      console.log(res);
+      if(res){
+        return {estdDmgOutput:0, estdCritDmgOutput:0};
+        /* return {estdDmgOutput:res.data.estdDmgOutput?response.data.estdDmgOutput:0, estdCritDmgOutput:response.data.estdCritDmgOutput?response.data.estdCritDmgOutput:0}; */
+      }
+      return {estdDmgOutput:0, estdCritDmgOutput:0};
+    });
   }
 }
 
