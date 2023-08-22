@@ -1,4 +1,4 @@
-import { Component, TransferState, makeStateKey, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, TransferState, makeStateKey, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
@@ -10,7 +10,7 @@ import { isPlatformServer } from '@angular/common';
   templateUrl: './dmg-calc.page.html',
   styleUrls: ['./dmg-calc.page.scss'],
 })
-export class DmgCalcPage {
+export class DmgCalcPage implements OnInit {
   apiUrl: string = `http://localhost:8008/hsr/dmg`;
   url: string|null = '';
   myStats: stats = {
@@ -41,13 +41,12 @@ export class DmgCalcPage {
     @Inject(PLATFORM_ID) private platformId:any,
     private trf: TransferState
   ) {
-  }
-  
-  ionViewWillEnter() {
     this.serverSide();
   }
+  
+  ngOnInit() { }
 
-  async serverSide(){
+  serverSide(){
     this.url = this.route.snapshot.paramMap.get('attr');
     if(this.url){
       const attr = this.url.split("_");
