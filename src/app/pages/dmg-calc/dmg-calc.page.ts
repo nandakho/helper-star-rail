@@ -100,6 +100,10 @@ export class DmgCalcPage implements OnInit {
     this.meta.updateTag({ property: 'og:description', content: desc });
     this.meta.updateTag({ property: 'og:title', content: 'Helper Star Rail - Damage Calculator' });
     this.meta.updateTag({ property: 'og:image', content: 'https://hsr.nandakho.my.id/assets/icon/icon.png' });
+    this.meta.updateTag({ property: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ property: 'twitter:title', content: 'Helper Star Rail - Damage Calculator' });
+    this.meta.updateTag({ property: 'twitter:description', content: desc });
+    this.meta.updateTag({ property: 'twitter:image', content: 'https://hsr.nandakho.my.id/assets/icon/icon.png' });
   }
 
   navCalc():void {
