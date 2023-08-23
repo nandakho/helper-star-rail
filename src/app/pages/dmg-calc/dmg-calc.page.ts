@@ -92,7 +92,7 @@ export class DmgCalcPage implements OnInit {
   }
 
   setTag(){
-    const desc = `<b>Honkai Star Rail - Damage Calculator</b>${this.url?`\n<b>Your damage is:</b> ${this.dmgResult.estdDmgOutput}\n<b>On critical:</b> ${this.dmgResult.estdCritDmgOutput}`:''}`;
+    const desc = `Calculate your damage based on several inputs!${this.url?`\nYour damage is: ${this.dmgResult.estdDmgOutput}\nOn critical: ${this.dmgResult.estdCritDmgOutput}`:''}`;
     this.title.setTitle('Helper Star Rail - Damage Calculator');
     this.meta.updateTag({ name: 'description', content: desc });
     this.meta.updateTag({ property: 'og:url', content: `/dmg-calc${this.url?'/'+this.url:''}` });
