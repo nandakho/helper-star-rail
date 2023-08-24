@@ -86,9 +86,9 @@ export class EffectHitRatePage implements OnInit {
   setTag(){
     var desc = ``;
     if(this.typeSelected==0){
-      desc += `What is your chance to apply effect on enemies?${this.url?`\nBase Chance: ${this.myStats.baseChance}%\nEnemy's Resist: ${this.myStats.enemiesResist}%\nResist Reduction: ${this.myStats.resistReduc}%\nEHR: ${this.myStats.ehr}%\nEffect Chance: ${this.result.realChance}%`:''}`;
+      desc += `What's your effect hit chance?${this.url?`\nBase Chance: ${this.myStats.baseChance}%, Enemy's Resist: ${this.myStats.enemiesResist}%, Resist Reduction: ${this.myStats.resistReduc}%, EHR: ${this.myStats.ehr}%\nEffect Hit Chance: ${this.result.realChance}%`:''}`;
     } else {
-      desc += `How many EHR stat is needed to guarantee effect hit on enemies?${this.url?`\nBase Chance: ${this.myStats.baseChance}%\nEnemy's Resist: ${this.myStats.enemiesResist}%\nResist Reduction: ${this.myStats.resistReduc}%\nEHR Needed: ${this.result.ehrNeeded}%`:''}`;
+      desc += `How many EHR is needed?${this.url?`\nBase Chance: ${this.myStats.baseChance}%, Enemy's Resist: ${this.myStats.enemiesResist}%, Resist Reduction: ${this.myStats.resistReduc}%\nEHR Needed: ${this.result.ehrNeeded}%`:''}`;
     }
     this.title.setTitle(`Helper Star Rail - Effect ${this.whatType[this.typeSelected].name}`);
     this.meta.updateTag({ name: 'description', content: desc });
