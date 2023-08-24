@@ -11,12 +11,13 @@ And yes, I do re-use the template I made for [Tools of Fantasy](https://github.c
 
 Currently, the project offers the following tools:  
 - **Damage Calculator**: This tool can helps players calculate damage output from a certain scenario.  API project for this calculator is made by mkahfi229 (a.k.a. Arucy) and [can be found here](https://github.com/mkahfi229/hsr-calculator)  
+- **Effect Hit Rate Calculator**: This tool can helps players calculate what is the chance to land an effect on enemy or calculate how many effect hit rate stat is needed to guarantee applying effect based on a certain scenario.  Same API is used for this calculator, made by mkahfi229 (a.k.a. Arucy) and [can be found here](https://github.com/mkahfi229/hsr-calculator)  
 - **Suggestion?**: Open an issue for feature request, if it's possible I might add it..  
 
 More tools will be added in future updates to further enhance the functionality and usability of the project.  
 
 ## Run Locally
-You can just visit the [online version here](https://hsr.nandakho.my.id/) **Coming Soon!**,  
+You can just visit the [online version here](https://hsr.nandakho.my.id/),  
 or to install and use Helper Star Rail locally, you can follow these steps:  
 1. Clone this repository to your local machine using the following command:  
 ```bash
@@ -34,13 +35,13 @@ npm install
 Notes: You might need to install ionic globally first with `npm i -g @ionic/cli`  
 More info at [ionic's official site](https://ionicframework.com/docs/intro/cli)
 ```bash
-ionic build
+npm run build:ssr
 ```
 5. Run the project locally:  
 ```bash
-ionic serve
+npm run serve:ssr
 ```
-6. Access the application through your web browser at [http://localhost:8100](http://localhost:8100).
+6. Access the application through your web browser at [http://localhost:4000](http://localhost:4000).
 
 ## Contributing
 Contributions to the Helper Star Rail project are welcome and encouraged.  

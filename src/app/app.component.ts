@@ -10,6 +10,7 @@ export class AppComponent {
   gitLink: string = "https://github.com/nandakho/helper-star-rail";
   public appPages = [
     { title: 'Damage Calculator', url: 'dmg-calc', icon: 'calculator' },
+    { title: 'EHR Calculator', url: 'effect-hit-rate', icon: 'flash' },
   ];
   constructor() {}
 }

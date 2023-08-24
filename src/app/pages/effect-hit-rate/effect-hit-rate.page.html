@@ -1,0 +1,63 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Effect {{whatType[typeSelected].name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-segment mode="ios" [value]="typeSelected" (ionChange)="segmentChanged($event)">
+        <ion-segment-button *ngFor="let t of whatType; let i=index" [value]="i">
+          <ion-label>{{t.name}}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-row>
+    <ion-row>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Calculate Effect {{whatType[typeSelected].name}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label class="subtitle">Input your stat below</ion-label>
+          <ion-list>
+            <ion-item lines="none" class="ion-text-wrap">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-input type="number" label="Base Chance" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.baseChance"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Enemy's Resist" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.enemiesResist"></ion-input>
+                  </ion-col>
+                  <ion-col>
+                    <ion-input type="number" label="Resist Reduction" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.resistReduc"></ion-input>
+                  </ion-col>
+                  <ion-col *ngIf="typeSelected==0">
+                    <ion-input type="number" label="EHR" labelPlacement="stacked" placeholder="0" [(ngModel)]="myStats.ehr"></ion-input>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-button color="warning" class="btn" fill="outline" (click)="navCalc()"><ion-icon name="color-wand-outline"></ion-icon>Calculate</ion-button>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col *ngIf="typeSelected==0">
+                    <ion-input readonly class="result" type="number" label="Effect Chance (Calculated)" labelPlacement="stacked" [(ngModel)]="result.realChance"></ion-input>
+                  </ion-col>
+                  <ion-col *ngIf="typeSelected==1">
+                    <ion-input readonly class="result" type="number" label="EHR Needed (Calculated)" labelPlacement="stacked" [(ngModel)]="result.ehrNeeded"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -13,6 +13,14 @@ const routes: Routes = [
   {
     path: 'dmg-calc/:attr',
     loadChildren: () => import('./pages/dmg-calc/dmg-calc.module').then( m => m.DmgCalcPageModule)
+  },
+  {
+    path: 'effect-hit-rate',
+    loadChildren: () => import('./pages/effect-hit-rate/effect-hit-rate.module').then( m => m.EffectHitRatePageModule)
+  },
+  {
+    path: 'effect-hit-rate/:attr',
+    loadChildren: () => import('./pages/effect-hit-rate/effect-hit-rate.module').then( m => m.EffectHitRatePageModule)
   }
 ];
 
