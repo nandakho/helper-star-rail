@@ -121,6 +121,10 @@ export class EffectHitRatePage implements OnInit {
       resistReduc: 0,
       ehr: 0,
     };
+    this.result = {
+      ehrNeeded: 0,
+      realChance: 0
+    }
     this.typeSelected = ev?.detail.value??0;
   }
 
