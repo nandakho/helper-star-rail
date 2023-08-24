@@ -115,6 +115,12 @@ export class EffectHitRatePage implements OnInit {
   }
 
   segmentChanged(ev:any) {
+    this.myStats = {
+      baseChance: 0,
+      enemiesResist: 0,
+      resistReduc: 0,
+      ehr: 0,
+    };
     this.typeSelected = ev?.detail.value??0;
   }
 
